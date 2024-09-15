@@ -1,9 +1,12 @@
+from threading import Lock
 from flask import Flask, render_template, request, redirect, url_for
+
 
 app = Flask(__name__)
 
 # Store results in memory (can later be moved to a database)
 results_list = []
+results_lock = Lock()
 
 @app.route('/')
 def index():
@@ -25,8 +28,11 @@ def submit_results():
         'Correct Supplementary': correct_supplementary,
         'Total Attempts': total_attempts
     }
-    results_list.append(result)
-
+    
+        # Use a lock to safely append results in a multi-threaded environment
+    with results_lock:
+        results_list.append(result)
+ 
     # Redirect to Thank You page after submission
     return redirect(url_for('thank_you'))
 
