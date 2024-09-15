@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complementary and Supplementary Angle Selector</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Angle Selector</h1>
+
+        <!-- Form to submit results -->
+        <form action="{{ url_for('submit_results') }}" method="POST">
+            
+            <!-- Mandatory Name Field -->
+            <label for="studentName">Name: </label>
+            <input type="text" id="studentName" name="name" required>
+            <span id="nameError" style="color:red;"></span>
+
+            <!-- Timer -->
+            <div>
+                <h3>Time left: <span id="timer">05:00</span></h3>
+            </div>
+
+            <!-- Complementary Angle Section -->
+            <div class="section">
+                <h2>1. Identify the pair of angles which are complement to each other (Sum = 90°)</h2>
+                <div class="angle-container">
+                    <!-- Draggable angles for Complementary Section -->
+                    <canvas class="draggable" draggable="true" id="complementary-30" data-value="30" width="100" height="100"></canvas>                   
+                    <canvas class="draggable" draggable="true" id="complementary-40" data-value="40" width="100" height="100"></canvas>
+                    <canvas class="draggable" draggable="true" id="complementary-70" data-value="70" width="100" height="100"></canvas>
+                    <canvas class="draggable" draggable="true" id="complementary-10" data-value="10" width="100" height="100"></canvas>
+                    <canvas class="draggable" draggable="true" id="complementary-60" data-value="60" width="100" height="100"></canvas>
+                    <canvas class="draggable" draggable="true" id="complementary-100" data-value="100" width="100" height="100"></canvas>
+                </div>
+
+                <!-- Drop area for Complementary Angles -->
+                <div class="drop-area" id="complementaryDropArea">Drop angles here</div>
+                <div id="complementaryFeedback" class="feedback"></div>
+
+                <!-- Reset Button for Complementary Angles -->
+                <button id="resetComplementaryButton" type="button">Reset Complementary Question</button>
+            </div>
+
+            <!-- Supplementary Angle Section -->
+            <div class="section">
+                <h2>2. Identify the pair of angles which are supplement to each other (Sum = 180°)</h2>
+                <div class="angle-container">
+                    <!-- Draggable angles for Supplementary Section -->
+                   
+                    <canvas class="draggable" draggable="true" id="supplementary-70" data-value="70" width="100" height="100"></canvas>
+                    <canvas class="draggable" draggable="true" id="supplementary-120" data-value="120" width="100" height="100"></canvas>
+                    <canvas class="draggable" draggable="true" id="supplementary-50" data-value="50" width="100" height="100"></canvas>
+                    <canvas class="draggable" draggable="true" id="supplementary-110" data-value="110" width="100" height="100"></canvas>
+                    <canvas class="draggable" draggable="true" id="supplementary-15" data-value="15" width="100" height="100"></canvas>
+                    <canvas class="draggable" draggable="true" id="supplementary-25" data-value="25" width="100" height="100"></canvas>
+                </div>
+
+                <!-- Drop area for Supplementary Angles -->
+                <div class="drop-area" id="supplementaryDropArea">Drop angles here</div>
+                <div id="supplementaryFeedback" class="feedback"></div>
+
+                <!-- Reset Button for Supplementary Angles -->
+                <button id="resetSupplementaryButton" type="button">Reset Supplementary Question</button>
+            </div>
+
+            <!-- Input fields to submit the correct number of answers -->
+            <input type="hidden" id="correctComplementary" name="correct_complementary">
+            <input type="hidden" id="correctSupplementary" name="correct_supplementary">
+            <input type="hidden" id="totalAttempts" name="total_attempts">
+
+            <!-- Submit Button for the form -->
+            <button id="submitButton" type="submit">Submit</button>
+
+        </form>
+
+        <div id="summary" style="margin-top:20px;"></div>
+    </div>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
