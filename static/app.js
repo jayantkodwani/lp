@@ -28,25 +28,39 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 1000);
 
     // Function to draw angles visually on canvas (draggable)
-    function drawAngleOnCanvas(canvasId, degrees) {
-        const canvas = document.getElementById(canvasId);
-        const ctx = canvas.getContext('2d');
-        const radius = 40;
+// Function to draw angles visually on canvas (draggable)
+// Function to draw angles visually on canvas (draggable) with additional 90-degree rotation
+// Function to draw angles visually on canvas (draggable) starting from the upward direction (12 o'clock)
+// Function to draw angles visually on canvas (draggable) starting from the 9 o'clock position (left side)
+function drawAngleOnCanvas(canvasId, degrees) {
+    const canvas = document.getElementById(canvasId);
+    const ctx = canvas.getContext('2d');
+    const radius = 40;
 
-        ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear any previous drawing
-        ctx.strokeStyle = "black"; // Set stroke color to black
-        ctx.lineWidth = 2; // Set line width for better visibility
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear any previous drawing
+    ctx.strokeStyle = "black"; // Set stroke color to black
+    ctx.lineWidth = 2; // Set line width for better visibility
 
-        ctx.beginPath();
-        ctx.moveTo(50, 50); // Starting point of the angle
-        ctx.arc(50, 50, radius, 0, degrees * Math.PI / 180); // Draw the angle arc
-        ctx.lineTo(50, 50); // Return back to the center
-        ctx.stroke(); // Apply the stroke to make the arc visible
+    // Start angle at 180 degrees (9 o'clock, or Math.PI radians)
+    const startAngle = Math.PI;
+    const endAngle = startAngle + degrees * Math.PI / 180; // Convert degrees to radians
 
-        ctx.font = '14px Arial'; // Set font for the angle label
-        ctx.fillStyle = 'black'; // Set text color to black
-        ctx.fillText(`${degrees}°`, 70, 50); // Display the angle value
-    }
+    // Draw the angle arc
+    ctx.beginPath();
+    ctx.moveTo(50, 50); // Move to the center of the canvas
+    ctx.arc(50, 50, radius, startAngle, endAngle); // Draw the arc based on start and end angles
+    ctx.lineTo(50, 50); // Return back to the center
+    ctx.stroke(); // Apply the stroke to make the arc visible
+
+    // Display the angle value
+    ctx.font = '14px Arial'; // Set font for the angle label
+    ctx.fillStyle = 'black'; // Set text color to black
+    ctx.fillText(`${degrees}°`, 70, 50); // Display the angle value
+}
+
+
+
+
 
     // Draw the draggable complementary angles
     drawAngleOnCanvas('complementary-30', 30);
@@ -98,14 +112,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateDropAreaWithAngle(dropArea, selectedAngles, type) {
         const totalAngle = selectedAngles.reduce((acc, angle) => acc + angle, 0);
         const ctx = prepareCanvasInDropArea(dropArea);
-
+    
         selectedAngles.forEach((angle, index) => {
             // Draw each angle, rotating based on the previous angle sum
             const rotationAngle = index === 0 ? 0 : selectedAngles.slice(0, index).reduce((acc, angle) => acc + angle, 0);
             drawRotatedAngle(ctx, rotationAngle, angle, index + 1);
         });
-
-        // Check after two angles are selected
+    
+        // Only check correctness after two angles are selected
         if (selectedAngles.length === 2) {
             totalAttempts++;
             if (type === 'complementary') {
@@ -117,22 +131,31 @@ document.addEventListener('DOMContentLoaded', () => {
                     correctSupplementary++;
                 }
             }
-        }
-
-        // Provide feedback on the sum
-        let feedbackText = `Total angle: ${totalAngle}°. `;
-        if (type === 'complementary') {
-            feedbackText += (totalAngle === 90) ? "Correct! The angles form a complementary pair." : "Incorrect. The angles don't sum up to 90°.";
-        } else if (type === 'supplementary') {
-            feedbackText += (totalAngle === 180) ? "Correct! The angles form a supplementary pair." : "Incorrect. The angles don't sum up to 180°.";
-        }
-
-        if (type === 'complementary') {
-            complementaryFeedback.textContent = feedbackText;
+    
+            // Provide feedback on the sum
+            let feedbackText = `Total angle: ${totalAngle}°. `;
+            if (type === 'complementary') {
+                feedbackText += (totalAngle === 90) ? "Correct! The angles form a complementary pair." : "Incorrect. The angles don't sum up to 90°.";
+            } else if (type === 'supplementary') {
+                feedbackText += (totalAngle === 180) ? "Correct! The angles form a supplementary pair." : "Incorrect. The angles don't sum up to 180°.";
+            }
+    
+            // Update feedback section with the result
+            if (type === 'complementary') {
+                complementaryFeedback.textContent = feedbackText;
+            } else {
+                supplementaryFeedback.textContent = feedbackText;
+            }
         } else {
-            supplementaryFeedback.textContent = feedbackText;
+            // Clear feedback for the first dropped angle
+            if (type === 'complementary') {
+                complementaryFeedback.textContent = '';
+            } else {
+                supplementaryFeedback.textContent = '';
+            }
         }
     }
+    
 
     // Function to prepare the canvas inside the drop area
     function prepareCanvasInDropArea(dropArea) {
@@ -147,24 +170,38 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Function to draw a rotated angle on the canvas with its measurement
-    function drawRotatedAngle(ctx, rotationAngle, angle, index) {
-        ctx.save();
-        ctx.translate(200, 200); // Move to the center of the canvas
-        ctx.rotate(rotationAngle * Math.PI / 180); // Rotate the context by the sum of the previous angles
-        ctx.beginPath();
-        ctx.moveTo(0, 0); // Start from the center
-        ctx.arc(0, 0, 100, 0, angle * Math.PI / 180); // Draw the angle arc with appropriate radius
-        ctx.lineTo(0, 0); // Draw back to the center
-        ctx.strokeStyle = 'black'; // Set stroke color to black
-        ctx.lineWidth = 2; // Set line width for better visibility
-        ctx.stroke(); // Render the angle
 
-        // Display the angle measurement
-        ctx.font = '16px Arial'; // Increased font size for better visibility
-        ctx.fillStyle = 'black'; // Set text color to black
-        ctx.fillText(`${angle}°`, 120, -30 * index); // Adjust text position to avoid cutting off
-        ctx.restore();
-    }
+// Function to draw a rotated angle on the canvas starting from the 9 o'clock position
+// Function to draw a rotated angle on the canvas with its measurement appearing straight
+function drawRotatedAngle(ctx, rotationAngle, angle, index) {
+    ctx.save();
+    ctx.translate(200, 200); // Move to the center of the canvas
+
+    // Rotate by the given rotation angle (for drawing the arc)
+    ctx.rotate((rotationAngle + 180) * Math.PI / 180); // Rotate by 180 degrees to start from 9 o'clock
+
+    // Draw the angle arc
+    ctx.beginPath();
+    ctx.moveTo(0, 0); // Start from the center
+    ctx.arc(0, 0, 100, 0, angle * Math.PI / 180); // Draw the angle arc with appropriate radius
+    ctx.lineTo(0, 0); // Draw back to the center
+    ctx.strokeStyle = 'black'; // Set stroke color to black
+    ctx.lineWidth = 2; // Set line width for better visibility
+    ctx.stroke(); // Render the angle
+
+    // Now, reset the rotation so the text appears straight
+    ctx.restore(); // Restore the context to its original state
+
+    // Draw the angle measurement as straight text (after rotation is reset)
+    ctx.save();
+    ctx.translate(200, 200); // Move to the center of the canvas again
+    ctx.font = '16px Arial'; // Set font size for the angle measurement
+    ctx.fillStyle = 'black'; // Set text color to black
+
+    // Draw the angle text straight, without any rotation
+    ctx.fillText(`${angle}°`, 120, -30 * index); // Adjust the text position for visibility
+    ctx.restore(); // Restore context after drawing text
+}
 
     // Reset functionality for complementary question
     document.getElementById('resetComplementaryButton').addEventListener('click', () => {
