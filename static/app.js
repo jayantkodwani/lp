@@ -67,7 +67,7 @@ function drawAngleOnCanvas(canvasId, degrees) {
     drawAngleOnCanvas('complementary-60', 60);
     drawAngleOnCanvas('complementary-40', 40);
     drawAngleOnCanvas('complementary-70', 70);
-    drawAngleOnCanvas('complementary-10', 10);
+    drawAngleOnCanvas('complementary-12', 12);
     drawAngleOnCanvas('complementary-100', 100);
 
     // Draw the draggable supplementary angles
